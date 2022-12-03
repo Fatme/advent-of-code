@@ -39,14 +39,12 @@ func main() {
 		secondLine := lines[i+1]
 		thirdLine := lines[i+2]
 
-		found := map[string]int{}
-
 		for j := 0; j < len(firstLine); j++ {
 			symbol := string(firstLine[j])
 
-			if strings.Contains(secondLine, symbol) && strings.Contains(thirdLine, symbol) && found[symbol] == 0 {
+			if strings.Contains(secondLine, symbol) && strings.Contains(thirdLine, symbol) {
 				sum += priorities[symbol]
-				found[symbol]++
+				break
 			}
 		}
 	}
@@ -67,14 +65,12 @@ func main1() {
 		part1 := line[:sizeToDivide]
 		part2 := line[sizeToDivide:]
 
-		found := map[string]int{}
-
 		for i := 0; i < len(part1); i++ {
 			symbol := string(part1[i])
 
-			if strings.Contains(part2, symbol) && found[symbol] == 0 {
+			if strings.Contains(part2, symbol) {
 				sum += priorities[symbol]
-				found[symbol]++
+				break
 			}
 		}
 	}
