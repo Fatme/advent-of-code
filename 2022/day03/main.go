@@ -27,7 +27,35 @@ func createPriorityMap() map[string]int {
 	return result
 }
 
+// Part 2
 func main() {
+	priorities := createPriorityMap()
+
+	sum := 0
+
+	lines := strings.Split(input, "\n")
+	for i := 0; i < len(lines)-2; i += 3 {
+		firstLine := lines[i]
+		secondLine := lines[i+1]
+		thirdLine := lines[i+2]
+
+		found := map[string]int{}
+
+		for j := 0; j < len(firstLine); j++ {
+			symbol := string(firstLine[j])
+
+			if strings.Contains(secondLine, symbol) && strings.Contains(thirdLine, symbol) && found[symbol] == 0 {
+				sum += priorities[symbol]
+				found[symbol]++
+			}
+		}
+	}
+
+	fmt.Println(sum)
+}
+
+// Part 1
+func main1() {
 	priorities := createPriorityMap()
 
 	sum := 0
