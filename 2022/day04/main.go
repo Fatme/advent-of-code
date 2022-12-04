@@ -9,7 +9,7 @@ import (
 var input = `2-4,6-8
 2-3,4-5
 5-7,7-9
-2-8,3-7
+3-7,2-8
 6-6,4-6
 2-6,4-8`
 
@@ -33,7 +33,13 @@ func main() {
 	for _, line := range lines {
 		x1, x2, y1, y2 := processLine(line)
 
-		if (x1 <= y1 && y2 <= x2) || (y1 <= x1 && x2 <= y2) {
+		// Part1
+		// if (x1 <= y1 && y2 <= x2) || (y1 <= x1 && x2 <= y2) {
+		// 	count++
+		// }
+
+		// Part2
+		if (x1 <= y1 && y1 <= x2) || (y1 <= x1 && x1 <= y2) {
 			count++
 		}
 	}
