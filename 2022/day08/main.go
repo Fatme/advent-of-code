@@ -7,60 +7,76 @@ import (
 	"strings"
 )
 
-func isVisible(board [][]int, i, j int) bool {
-	return isVisibleFromLeft(board, i, j) || isVisibleFromRight(board, i, j) || isVisibleFromTop(board, i, j) || isVisibleFromBottom(board, i, j)
+func process(board [][]int, i, j int) (bool, int) {
+	isVisibleFromLeft, leftCount := processLeft(board, i, j)
+	isVisibleFromRight, rightCount := processRight(board, i, j)
+	isVisibleFromTop, topCount := processTop(board, i, j)
+	isVisibleFromBottom, bottomCount := processBottom(board, i, j)
+
+	isVisible := isVisibleFromLeft || isVisibleFromRight || isVisibleFromTop || isVisibleFromBottom
+	score := leftCount * rightCount * topCount * bottomCount
+
+	return isVisible, score
 }
 
-func isVisibleFromLeft(board [][]int, i, j int) bool {
+func processLeft(board [][]int, i, j int) (bool, int) {
 	visible := true
+	count := 0
 
 	for k := j - 1; k >= 0; k-- {
+		count++
 		if board[i][k] >= board[i][j] {
 			visible = false
 			break
 		}
 	}
 
-	return visible
+	return visible, count
 }
 
-func isVisibleFromRight(board [][]int, i, j int) bool {
+func processRight(board [][]int, i, j int) (bool, int) {
 	visible := true
+	count := 0
 
 	for k := j + 1; k < len(board[i]); k++ {
+		count++
 		if board[i][k] >= board[i][j] {
 			visible = false
 			break
 		}
 	}
 
-	return visible
+	return visible, count
 }
 
-func isVisibleFromTop(board [][]int, i, j int) bool {
+func processTop(board [][]int, i, j int) (bool, int) {
 	visible := true
+	count := 0
 
 	for k := i - 1; k >= 0; k-- {
+		count++
 		if board[k][j] >= board[i][j] {
 			visible = false
 			break
 		}
 	}
 
-	return visible
+	return visible, count
 }
 
-func isVisibleFromBottom(board [][]int, i, j int) bool {
+func processBottom(board [][]int, i, j int) (bool, int) {
 	visible := true
+	count := 0
 
 	for k := i + 1; k < len(board); k++ {
+		count++
 		if board[k][j] >= board[i][j] {
 			visible = false
 			break
 		}
 	}
 
-	return visible
+	return visible, count
 }
 
 func main() {
@@ -80,13 +96,21 @@ func main() {
 
 	count := 2*(len(board)+len(board[0])) - 4
 
+	maxScore := 0
+
 	for i := 1; i < len(board)-1; i++ {
 		for j := 1; j < len(board[i])-1; j++ {
-			if isVisible(board, i, j) {
+			isVisible, score := process(board, i, j)
+			if isVisible {
 				count++
+			}
+
+			if score > maxScore {
+				maxScore = score
 			}
 		}
 	}
 
 	fmt.Println(count)
+	fmt.Println(maxScore)
 }
