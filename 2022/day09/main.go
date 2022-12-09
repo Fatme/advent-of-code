@@ -17,10 +17,6 @@ func (p *Position) id() string {
 	return fmt.Sprintf("%d->%d", p.x, p.y)
 }
 
-func (p *Position) distance(other *Position) int {
-	return int(math.Abs(float64(p.x-other.x)) + math.Abs(float64(p.y-other.y)))
-}
-
 func (p *Position) move(xSteps int, ySteps int) *Position {
 	return &Position{x: p.x + xSteps, y: p.y + ySteps}
 }
@@ -50,40 +46,19 @@ func (r *Rope) moveHead(direction string) {
 }
 
 func (r *Rope) moveTail() {
-	min := math.MaxInt
-	result := &Position{}
-
-	tail := r.tail
-	head := r.head
-
-	// (-1, -1), (-1, 0), (-1, 1),
-	// (0, -1), (0, 0), (0, 1),
-	// (1, -1), (1, 0), (1, 1)
-	possiblePositions := []*Position{
-		{x: tail.x - 1, y: tail.y - 1},
-		{x: tail.x - 1, y: tail.y},
-		{x: tail.x - 1, y: tail.y + 1},
-
-		{x: tail.x, y: tail.y - 1},
-		{x: tail.x, y: tail.y},
-		{x: tail.x, y: tail.y + 1},
-
-		{x: tail.x + 1, y: tail.y - 1},
-		{x: tail.x + 1, y: tail.y},
-		{x: tail.x + 1, y: tail.y + 1},
+	if r.tail.x < r.head.x {
+		r.tail.x++
+	} else if r.tail.x > r.head.x {
+		r.tail.x--
 	}
 
-	for _, position := range possiblePositions {
-		distance := head.distance(position)
-		if distance < min {
-			min = distance
-			result = position
-		}
+	if r.tail.y < r.head.y {
+		r.tail.y++
+	} else if r.tail.y > r.head.y {
+		r.tail.y--
 	}
 
-	r.tail = result
-
-	r.visitedTailPositions[r.tail.id()] = tail
+	r.visitedTailPositions[r.tail.id()] = r.tail
 }
 
 func (r *Rope) shouldMoveTail() bool {
