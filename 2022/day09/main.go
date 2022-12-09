@@ -17,8 +17,9 @@ func (p *Position) id() string {
 	return fmt.Sprintf("%d->%d", p.x, p.y)
 }
 
-func (p *Position) move(xSteps int, ySteps int) *Position {
-	return &Position{x: p.x + xSteps, y: p.y + ySteps}
+func (p *Position) move(xSteps int, ySteps int) {
+	p.x += xSteps
+	p.y += ySteps
 }
 
 type Rope struct {
@@ -29,19 +30,19 @@ type Rope struct {
 
 func (r *Rope) moveHead(direction string) {
 	if direction == "R" {
-		r.head = r.head.move(0, 1)
+		r.head.move(0, 1)
 	}
 
 	if direction == "L" {
-		r.head = r.head.move(0, -1)
+		r.head.move(0, -1)
 	}
 
 	if direction == "U" {
-		r.head = r.head.move(-1, 0)
+		r.head.move(-1, 0)
 	}
 
 	if direction == "D" {
-		r.head = r.head.move(1, 0)
+		r.head.move(1, 0)
 	}
 }
 
