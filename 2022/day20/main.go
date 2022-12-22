@@ -12,23 +12,30 @@ var input string
 
 type item [2]int
 
+const decryptionKey = 811589153
+
 func main() {
 	lines := strings.Split(input, "\n")
-	length := len(lines)
 
+	solvePart1(lines)
+	solvePart2(lines)
+}
+
+func readInput(lines []string, multiplicator int) ([]item, []int) {
 	items := []item{}
 	nums := []int{}
 
 	for index, line := range lines {
 		num, _ := strconv.Atoi(line)
+		num *= multiplicator
 		nums = append(nums, num)
 		items = append(items, item{num, index})
 	}
 
-	solvePart1(items, nums, length)
+	return items, nums
 }
 
-func solvePart1(items []item, nums []int, length int) {
+func mix(items []item, nums []int, length int) {
 	for index, num := range nums {
 		if num == 0 {
 			continue
@@ -54,9 +61,35 @@ func solvePart1(items []item, nums []int, length int) {
 		}
 
 		items[newPosition][0] = num
+		items[newPosition][1] = index
+	}
+}
+
+func solvePart1(lines []string) {
+	length := len(lines)
+	items, nums := readInput(lines, 1)
+
+	mix(items, nums, length)
+
+	sum := getResult(items, nums, length)
+	fmt.Println(sum)
+}
+
+func solvePart2(lines []string) {
+	length := len(lines)
+	items, nums := readInput(lines, decryptionKey)
+
+	for i := 0; i < 10; i++ {
+		mix(items, nums, length)
 	}
 
+	sum := getResult(items, nums, length)
+	fmt.Println(sum)
+}
+
+func getResult(items []item, nums []int, length int) int {
 	initialZeroIndex := 0
+
 	for index, item := range items {
 		if item[0] == 0 {
 			initialZeroIndex = index
@@ -70,7 +103,7 @@ func solvePart1(items []item, nums []int, length int) {
 
 	sum := num1000 + num2000 + num3000
 
-	fmt.Println(sum)
+	return sum
 }
 
 func getNewPosition(currentPosition, num, length int) int {
